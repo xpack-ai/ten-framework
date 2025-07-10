@@ -275,7 +275,7 @@ class OpenAIChatGPTExtension(AsyncLLMBaseExtension):
                                     await self.queue_input_item(
                                         True,
                                         messages=[tool_message, new_message],
-                                        no_tool=True,
+                                        no_tool=False,
                                     )
                                 else:
                                     async_ten_env.log_error(

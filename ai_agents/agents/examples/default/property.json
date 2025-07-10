@@ -47,26 +47,31 @@
             "property": {
               "api_key": "${env:OPENAI_API_KEY}",
               "base_url": "",
-              "frequency_penalty": 0.9,
               "greeting": "TEN Agent connected. How can I help you today?",
-              "max_memory_length": 10,
-              "max_tokens": 512,
+              "max_memory_length": 20,
+              "max_tokens": 8096,
               "model": "${env:OPENAI_MODEL}",
-              "prompt": "",
-              "proxy_url": "${env:OPENAI_PROXY_URL}"
+              "prompt": "You are a helpful and intelligent AI voice assistant. You can have natural conversations with users and help them with various tasks. You should respond directly to user questions and engage in meaningful dialogue. When users need specific information that requires external data (like weather, news, web searches, API calls, etc.), you have access to MCP (Model Context Protocol) tools that can help. Use MCP tools strategically when: 1) The user explicitly asks for real-time information 2) The task requires external data sources 3) Specific functionality is needed that tools can provide. For general questions, conversations, explanations, or tasks that don't require external data, respond directly without using any tools. Be conversational, helpful, and think before deciding whether a tool is actually needed.",
+              "proxy_url": "${env:OPENAI_PROXY_URL}",
+              "temperature": 0.7
             }
           },
           {
             "type": "extension",
             "name": "tts",
-            "addon": "fish_audio_tts",
+            "addon": "elevenlabs_tts_python",
             "extension_group": "tts",
             "property": {
-              "api_key": "${env:FISH_AUDIO_TTS_KEY}",
-              "model_id": "d8639b5cc95548f5afbcfe22d3ba5ce5",
-              "optimize_streaming_latency": true,
+              "api_key": "${env:ELEVENLABS_TTS_KEY}",
+              "base_url": "",
+              "model_id": "eleven_multilingual_v2",
+              "optimize_streaming_latency": 0,
+              "prompt": "",
               "request_timeout_seconds": 30,
-              "base_url": "https://api.fish.audio"
+              "similarity_boost": 0.75,
+              "speaker_boost": false,
+              "stability": 0.5,
+              "voice_id": "pNInz6obpgDQGcFmaJgB"
             }
           },
           {
@@ -85,11 +90,11 @@
           },
           {
             "type": "extension",
-            "name": "weatherapi_tool_python",
-            "addon": "weatherapi_tool_python",
+            "name": "mcp_client_python",
+            "addon": "mcp_client_python",
             "extension_group": "default",
             "property": {
-              "api_key": "${env:WEATHERAPI_API_KEY|}"
+              "url": "https://api.xpack.ai/v1/mcp?apikey={YOUR_XPACK_AUTH_KEY}"
             }
           }
         ],
@@ -164,7 +169,7 @@
                 "name": "tool_call",
                 "dest": [
                   {
-                    "extension": "weatherapi_tool_python"
+                    "extension": "mcp_client_python"
                   }
                 ]
               }
@@ -251,7 +256,7 @@
             ]
           },
           {
-            "extension": "weatherapi_tool_python",
+            "extension": "mcp_client_python",
             "cmd": [
               {
                 "name": "tool_register",
