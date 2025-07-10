@@ -4,7 +4,7 @@
 
 [![GitHub license](https://img.shields.io/badge/License-Apache_2.0-blue.svg?labelColor=%20%239b8afb&color=%20%237a5af8)](https://github.com/TEN-framework/TEN-Agent/blob/main/LICENSE) [![XPack](https://img.shields.io/badge/XPack-Try%20it%20now!-blue?logo=googlechrome&logoColor=white)](https://xpack.ai)
 
-[English](README.md) | [简体中文](README-CN.md) | [日本語](README-JP.md) | [한국어](README-KR.md)
+[English](README.md) | [简体中文](docs/README-CN.md) | [日本語](docs/README-JP.md) | [한국어](docs/README-KR.md) | [Español](docs/README-ES.md) | [Français](docs/README-FR.md) | [Italiano](docs/README-IT.md)
 
 </div>
 
