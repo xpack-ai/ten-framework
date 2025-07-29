@@ -147,7 +147,7 @@ XPack's Model Context Protocol (MCP) integration enables TEN to connect with ext
 - Click **`Setting Icon Button`**
 - In the configuration panel:
    - From **`Extension`** dropdown, select **`mcp_client_python`**
-   - In URL field, enter:`https://api.xpack.ai/v1/mcp?apikey={YOUR_XPACK_AUTH_KEY}`
+   - In URL field, enter:`https://mcp.xpack.ai/v1/mcp?apikey={YOUR_XPACK_AUTH_KEY}`
 - Click **`Save changes`**
 
 ![add mcp extension](./docs/assets/ui-mcp-config-3.png)

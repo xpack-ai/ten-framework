@@ -147,7 +147,7 @@ XPack 的模型上下文协议 (MCP) 集成使 TEN 能够连接外部工具和�
 - 点击 **“设置”图标按钮**
 - 在配置面板中：
    - 从 **`Extension`** 下拉菜单中选择 **`mcp_client_python`**
-   - 在 URL 字段中输入：`https://api.xpack.ai/v1/mcp?apikey={YOUR_XPACK_AUTH_KEY}`
+   - 在 URL 字段中输入：`https://mcp.xpack.ai/v1/mcp?apikey={YOUR_XPACK_AUTH_KEY}`
 - 点击 **`Save changes`**
 
 ![add mcp extension](./assets/ui-mcp-config-3.png)

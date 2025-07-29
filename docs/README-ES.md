@@ -147,7 +147,7 @@ La integración del Protocolo de Contexto de Modelo (MCP) de XPack permite que T
 - Haz clic en **`Setting Icon Button`**
 - En el panel de configuración:
    - Selecciona **`mcp_client_python`** del desplegable **`Extension`**
-   - Ingresa en el campo URL: `https://api.xpack.ai/v1/mcp?apikey={YOUR_XPACK_AUTH_KEY}`
+   - Ingresa en el campo URL: `https://mcp.xpack.ai/v1/mcp?apikey={YOUR_XPACK_AUTH_KEY}`
 - Haz clic en **`Save changes`**
 
 ![add mcp extension](./assets/ui-mcp-config-3.png)

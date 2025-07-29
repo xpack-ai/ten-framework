@@ -147,7 +147,7 @@ XPackのModel Context Protocol（MCP）統合により、TENは外部ツール�
 - **`Setting Icon Button`**をクリック
 - 設定パネルで：
    - **`Extension`**ドロップダウンから**`mcp_client_python`**を選択
-   - URLフィールドに入力：`https://api.xpack.ai/v1/mcp?apikey={YOUR_XPACK_AUTH_KEY}`
+   - URLフィールドに入力：`https://mcp.xpack.ai/v1/mcp?apikey={YOUR_XPACK_AUTH_KEY}`
 - **`Save changes`**をクリック
 
 ![add mcp extension](./assets/ui-mcp-config-3.png)
